@@ -17,7 +17,7 @@ def addVehicle(table, brand, plat, *args):
     sql = f"INSERT INTO {table} VALUES ({placeholders})"
     myCursor.execute(sql, values)
     myDb.commit()
-    print(f"{'Mobil' if table == 'mobil' else 'Motor'} berhasil ditambahkan")
+    print(f"{'Mobil' if table == 'mobil' else 'Motor'} berhasil ditambahkan") 
 
 
 def admin():
