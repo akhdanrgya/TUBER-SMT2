@@ -132,6 +132,10 @@ def main():
 
         elif pilih == 4:
             admin()
+        
+        elif pilih == 5:
+            print("Terimakasih sudah menggunakan aplikasi ini :)")
+            break
 
 
 main()
