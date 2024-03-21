@@ -11,6 +11,7 @@ myDb = mysql.connector.connect(
 
 myCursor = myDb.cursor()
 
+
 def addVehicle(table, brand, plat, *args):
     try:
         values = (brand, plat, *args)
@@ -18,7 +19,7 @@ def addVehicle(table, brand, plat, *args):
         sql = f"INSERT INTO {table} VALUES ({placeholders})"
         myCursor.execute(sql, values)
         myDb.commit()
-        print(f"{'Mobil' if table == 'mobil' else 'Motor'} berhasil ditambahkan") 
+        print(f"{'Mobil' if table == 'mobil' else 'Motor'} berhasil ditambahkan")
     except Exception as err:
         print(f"fungsi addVehicle error : {err}")
 
@@ -32,6 +33,7 @@ def deleteVehicle(table, vehicle_id):
     except Exception as err:
         print(f"fungsi deleteVehicle error : {err}")
 
+
 def admin():
     try:
         os.system("cls")
@@ -39,40 +41,61 @@ def admin():
             print("""
                 <<< Menu Admin >>>
                 
-                1. Tambah Mobil
-                2. Tambah Motor
-                3. Hapus Mobil
-                4. Hapus Motor
-                5. Back
-                6. Exit
+                1. Tambah
+                2. Hapus
+                3. Edit
+                4. Back
+                5. Exit
                 
                 """)
             pilih = int(input("Masukan Pilihan: "))
 
             if pilih == 1:
-                brandMobil = input("Masukkan brand mobil: ")
-                platMobil = input("Masukkan plat mobil: ")
-                hargaMobil = input("Masukkan harga sewa mobil: ")
-                
-                addVehicle("mobil", None, brandMobil, platMobil, hargaMobil)
+                print("""
+                1. Mobil
+                2. Motor
+                3. Back
+                      """)
+
+                pilihSub1 = int(input("Masukan Pilihan: "))
+
+                if pilihSub1 == 1:
+                    brandMobil = input("Masukkan brand mobil: ")
+                    platMobil = input("Masukkan plat mobil: ")
+                    hargaMobil = input("Masukkan harga sewa mobil: ")
+                    addVehicle("mobil", None, brandMobil,
+                               platMobil, hargaMobil)
+                elif pilihSub1 == 2:
+                    brandMotor = input("Masukan brand motor: ")
+                    platMotor = input("Masukan plat motor: ")
+                    cc = input("Masukan CC motor: ")
+                    hargaMotor = input("Masukan harga sewa motor: ")
+                    addVehicle("motor", None, brandMotor,
+                               platMotor, hargaMotor, cc)
+                elif pilihSub1 == 3:
+                    admin()
 
             elif pilih == 2:
-                brandMotor = input("Masukan brand motor: ")
-                platMotor = input("Masukan plat motor: ")
-                cc = input("Masukan CC motor: ")
-                hargaMotor = input("Masukan harga sewa motor: ")
-                
-                addVehicle("motor", None, brandMotor, platMotor, hargaMotor, cc)
+                print("""
+                1. Mobil
+                2. Motor
+                3. Back
+                      """)
 
-            elif pilih == 3:
-                delete_id = int(input("Masukkan ID Mobil yang akan dihapus: "))
-                deleteVehicle("mobil", delete_id)
+                pilihSub2 = int(input("Masukan Pilihan: "))
+
+                if pilihSub2 == 1:
+                    delete_id = int(
+                        input("Masukkan ID Mobil yang akan dihapus: "))
+                    deleteVehicle("mobil", delete_id)
+                elif pilihSub2 == 2:
+                    delete_id = int(
+                        input("Masukkan ID Motor yang akan dihapus: "))
+                    deleteVehicle("motor", delete_id)
+                elif pilihSub2 == 3:
+                    admin()
 
             elif pilih == 4:
-                delete_id = int(input("Masukkan ID Motor yang akan dihapus: "))
-                deleteVehicle("motor", delete_id)
-
-            elif pilih == 5:
                 main()
     except Exception as err:
         print(f"fungsi admin error : {err}")
@@ -83,7 +106,8 @@ def show_vehicles(table_name):
         if table_name == 'mobil':
             myCursor.execute("SELECT id_mobil, brand, plat, harga FROM mobil")
         elif table_name == 'motor':
-            myCursor.execute("SELECT id_motor, brand, plat, cc, harga FROM motor")
+            myCursor.execute(
+                "SELECT id_motor, brand, plat, cc, harga FROM motor")
 
         for row in myCursor:
             print(f"\nId      : {row[0]}")
@@ -94,6 +118,7 @@ def show_vehicles(table_name):
             print(f"Harga   : {row[-1]}")
     except Exception as err:
         print(f"fungsi show_vehicles error : {err}")
+
 
 def main():
     try:
@@ -134,7 +159,7 @@ def main():
 
                 if sewaMotor in idMotor_list:
                     print("Anjay")
-                else :
+                else:
                     print("error")
 
             elif pilih == 3:
@@ -160,11 +185,12 @@ def main():
 
             elif pilih == 4:
                 admin()
-            
+
             elif pilih == 5:
                 print("Terimakasih sudah menggunakan aplikasi ini :)")
                 break
     except Exception as err:
         print(f"fungsi main error : {err}")
+
 
 main()
