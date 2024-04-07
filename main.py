@@ -27,11 +27,20 @@ def addVehicle(table, brand, plat, *args):
 def deleteVehicle(table, vehicle_id):
     try:
         sql = f"DELETE FROM {table} WHERE {'id_mobil' if table == 'mobil' else 'id_motor'} = %s"
-        myCursor.execute(sql, (vehicle_id,))
+        myCursor.execute(sql, (vehicle_id))
         myDb.commit()
         print(f"{'Mobil' if table == 'mobil' else 'Motor'} berhasil dihapus")
     except Exception as err:
         print(f"fungsi deleteVehicle error : {err}")
+
+def updateVehicle(table, vehicle_id, value, edit):
+    try:
+        sql = f"UPDATE {table} SET {edit} = {value} WHERE {'id_mobil' if table == 'mobil' else 'id_motor'} = {vehicle_id}"
+        myCursor.execute(sql)
+        myDb.commit()
+        print(f"{'Mobil' if table == 'mobil' else 'Motor'} berhasil diedit")
+    except Exception as err:
+        print(f"fungsi updateVehicle error : {err}")
 
 
 def admin():
@@ -94,7 +103,15 @@ def admin():
                     deleteVehicle("motor", delete_id)
                 elif pilihSub2 == 3:
                     admin()
-
+            
+            elif pilih == 3:
+                jenis = input("Masukan jenis kendaraan yang ingin di edit (mobil/motor): ")
+                idKendaraan = int(input("Masukan id kendaraan yang ingin diedit: "))
+                edit = input("Masukan apa yang ingin di edit (brand, plat, cc, harga): ")
+                value = input("Masukan value: ")
+                
+                updateVehicle(jenis, idKendaraan, value, edit)
+            
             elif pilih == 4:
                 main()
     except Exception as err:
