@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import mysql.connector
 import os
 
@@ -33,6 +34,7 @@ def deleteVehicle(table, vehicle_id):
     except Exception as err:
         print(f"fungsi deleteVehicle error : {err}")
 
+
 def updateVehicle(table, vehicle_id, value, edit):
     try:
         sql = f"UPDATE {table} SET {edit} = {value} WHERE {'id_mobil' if table == 'mobil' else 'id_motor'} = {vehicle_id}"
@@ -42,6 +44,38 @@ def updateVehicle(table, vehicle_id, value, edit):
     except Exception as err:
         print(f"fungsi updateVehicle error : {err}")
 
+def insertToTransaction(nama, jenis, idKendaraan, waktuAwal, waktu):
+    
+    waktuAkhir = waktuAwal + timedelta(hours=waktu)
+    myCursor.execute(f"SELECT harga FROM {jenis} WHERE id_{jenis} = {idKendaraan}")
+    harga = myCursor.fetchone()[0]
+    jumlahHarga = harga * waktu
+    
+    try:
+        sql = f"INSERT INTO transaction (nama, jenisKendaraan, idKendaraan, waktuAwal, waktuAkhir, harga) VALUES ('{nama}', '{jenis}', {idKendaraan}, '{waktuAwal}', '{waktuAkhir}', {jumlahHarga})"
+        myCursor.execute(sql)
+        myDb.commit()
+        print(f"{jenis} di sewa oleh {nama} dengan total waktu {waktu} dengan total harga ")
+    except Exception as err:
+        print(f"Fungsi fetchToTransaction error : {err}")
+
+def show_vehicles(table_name):
+    try:
+        if table_name == 'mobil':
+            myCursor.execute("SELECT id_mobil, brand, plat, harga FROM mobil")
+        elif table_name == 'motor':
+            myCursor.execute(
+                "SELECT id_motor, brand, plat, cc, harga FROM motor")
+
+        for row in myCursor:
+            print(f"\nId      : {row[0]}")
+            print(f"Brand   : {row[1]}")
+            print(f"Plat    : {row[2]}")
+            if table_name == 'motor':
+                print(f"CC      : {row[3]}")
+            print(f"Harga   : {row[-1]}")
+    except Exception as err:
+        print(f"fungsi show_vehicles error : {err}")
 
 def admin():
     try:
@@ -118,23 +152,6 @@ def admin():
         print(f"fungsi admin error : {err}")
 
 
-def show_vehicles(table_name):
-    try:
-        if table_name == 'mobil':
-            myCursor.execute("SELECT id_mobil, brand, plat, harga FROM mobil")
-        elif table_name == 'motor':
-            myCursor.execute(
-                "SELECT id_motor, brand, plat, cc, harga FROM motor")
-
-        for row in myCursor:
-            print(f"\nId      : {row[0]}")
-            print(f"Brand   : {row[1]}")
-            print(f"Plat    : {row[2]}")
-            if table_name == 'motor':
-                print(f"CC      : {row[3]}")
-            print(f"Harga   : {row[-1]}")
-    except Exception as err:
-        print(f"fungsi show_vehicles error : {err}")
 
 
 def main():
@@ -162,7 +179,12 @@ def main():
                 idMobil_list = [record[0] for record in idMobil_records]
 
                 if sewaMobil in idMobil_list:
-                    print("1")
+                    waktuAwalMobil = datetime.now()
+                    nama = input("Masukan nama anda: ")
+                    jenis = 'mobil'
+                    waktu = int(input("Masukan total waktu per jam (1/2/3/4...) :"))
+
+                    insertToTransaction(nama, jenis, sewaMobil, waktuAwalMobil, waktu)
                 else:
                     print("error")
 
