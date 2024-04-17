@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 import mysql.connector
 import os
 
-
 myDb = mysql.connector.connect(
     host="localhost",
     user="root",
@@ -44,20 +43,32 @@ def updateVehicle(table, vehicle_id, value, edit):
     except Exception as err:
         print(f"fungsi updateVehicle error : {err}")
 
+
 def insertToTransaction(nama, jenis, idKendaraan, waktuAwal, waktu):
-    
+
     waktuAkhir = waktuAwal + timedelta(hours=waktu)
-    myCursor.execute(f"SELECT harga FROM {jenis} WHERE id_{jenis} = {idKendaraan}")
+    myCursor.execute(
+        f"SELECT harga FROM {jenis} WHERE id_{jenis} = {idKendaraan}")
     harga = myCursor.fetchone()[0]
     jumlahHarga = harga * waktu
-    
+
     try:
         sql = f"INSERT INTO transaction (nama, jenisKendaraan, idKendaraan, waktuAwal, waktuAkhir, harga) VALUES ('{nama}', '{jenis}', {idKendaraan}, '{waktuAwal}', '{waktuAkhir}', {jumlahHarga})"
         myCursor.execute(sql)
         myDb.commit()
-        print(f"{jenis} di sewa oleh {nama} dengan total waktu {waktu} dengan total harga ")
+        print(
+            f"{jenis} di sewa oleh {nama} dengan total waktu {waktu} dengan total harga {jumlahHarga}")
     except Exception as err:
         print(f"Fungsi fetchToTransaction error : {err}")
+
+
+def transaction(jenis, idKendaraan):
+    nama = input("Masukan nama anda: ")
+    waktuAwal = datetime.now()
+    waktu = int(input("Masukan total waktu perjam (1/2/3/4.....): "))
+
+    insertToTransaction(nama, jenis, idKendaraan, waktuAwal, waktu)
+
 
 def show_vehicles(table_name):
     try:
@@ -77,6 +88,24 @@ def show_vehicles(table_name):
     except Exception as err:
         print(f"fungsi show_vehicles error : {err}")
 
+
+def showTransaction():
+    try:
+        myCursor.execute("SELECT * FROM transaction")
+
+        for row in myCursor:
+            print(f"\nId              : {row[0]}")
+            print(f"Nama            : {row[1]}")
+            print(f"Jenis           : {row[2]}")
+            print(f"Id Kendaraan    : {row[3]}")
+            print(f"Waktu Awal      : {row[4]}")
+            print(f"Waktu Akhir     : {row[5]}")
+            print(f"Harga           : {row[6]}")
+
+    except Exception as err:
+        print(f"Fungsi showTransaction error : {err}")
+
+
 def admin():
     try:
         os.system("cls")
@@ -87,8 +116,9 @@ def admin():
                 1. Tambah
                 2. Hapus
                 3. Edit
-                4. Back
-                5. Exit
+                4. Data Transaksi
+                5. Back
+                6. Exit
                 
                 """)
             pilih = int(input("Masukan Pilihan: "))
@@ -137,21 +167,26 @@ def admin():
                     deleteVehicle("motor", delete_id)
                 elif pilihSub2 == 3:
                     admin()
-            
+
             elif pilih == 3:
-                jenis = input("Masukan jenis kendaraan yang ingin di edit (mobil/motor): ")
-                idKendaraan = int(input("Masukan id kendaraan yang ingin diedit: "))
-                edit = input("Masukan apa yang ingin di edit (brand, plat, cc, harga): ")
+                jenis = input(
+                    "Masukan jenis kendaraan yang ingin di edit (mobil/motor): ")
+                idKendaraan = int(
+                    input("Masukan id kendaraan yang ingin diedit: "))
+                edit = input(
+                    "Masukan apa yang ingin di edit (brand, plat, cc, harga): ")
                 value = input("Masukan value: ")
-                
+
                 updateVehicle(jenis, idKendaraan, value, edit)
-            
+
             elif pilih == 4:
+                showTransaction()
+
+            elif pilih == 5:
                 main()
+
     except Exception as err:
         print(f"fungsi admin error : {err}")
-
-
 
 
 def main():
@@ -179,14 +214,10 @@ def main():
                 idMobil_list = [record[0] for record in idMobil_records]
 
                 if sewaMobil in idMobil_list:
-                    waktuAwalMobil = datetime.now()
-                    nama = input("Masukan nama anda: ")
                     jenis = 'mobil'
-                    waktu = int(input("Masukan total waktu per jam (1/2/3/4...) :"))
-
-                    insertToTransaction(nama, jenis, sewaMobil, waktuAwalMobil, waktu)
+                    transaction(jenis, sewaMobil)
                 else:
-                    print("error")
+                    print(f"Mobil dengan id {sewaMobil} tidak ada")
 
             elif pilih == 2:
                 sewaMotor = int(input("Masukan ID Motor: "))
@@ -197,9 +228,10 @@ def main():
                 idMotor_list = [record[0] for record in idMotor_records]
 
                 if sewaMotor in idMotor_list:
-                    print("Anjay")
+                    jenis = 'motor'
+                    transaction(jenis, sewaMotor)
                 else:
-                    print("error")
+                    print(f"Motor dengan id {sewaMotor} tidak ada")
 
             elif pilih == 3:
                 os.system("cls")
