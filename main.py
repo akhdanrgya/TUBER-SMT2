@@ -263,5 +263,5 @@ def main():
     except Exception as err:
         print(f"fungsi main error : {err}")
 
-
-main()
+if __name__ == "__main__":
+    main()
