@@ -21,7 +21,7 @@ def addVehicle(table, brand, plat, *args):
         myDb.commit()
         print(f"{'Mobil' if table == 'mobil' else 'Motor'} berhasil ditambahkan")
     except Exception as err:
-        print(f"fungsi addVehicle error : {err}")
+        print(f"Gagal menambahkan kendaraan : {err}")
 
 
 def deleteVehicle(table, vehicle_id):
@@ -31,7 +31,7 @@ def deleteVehicle(table, vehicle_id):
         myDb.commit()
         print(f"{'Mobil' if table == 'mobil' else 'Motor'} berhasil dihapus")
     except Exception as err:
-        print(f"fungsi deleteVehicle error : {err}")
+        print(f"Gagal menghapus kendaraan : {err}")
 
 
 def updateVehicle(table, vehicle_id, value, edit):
@@ -41,7 +41,7 @@ def updateVehicle(table, vehicle_id, value, edit):
         myDb.commit()
         print(f"{'Mobil' if table == 'mobil' else 'Motor'} berhasil diedit")
     except Exception as err:
-        print(f"fungsi updateVehicle error : {err}")
+        print(f"Gagal update kendaraan : {err}")
 
 
 def insertToTransaction(nama, jenis, idKendaraan, waktuAwal, waktu):
@@ -59,7 +59,7 @@ def insertToTransaction(nama, jenis, idKendaraan, waktuAwal, waktu):
         print(
             f"{jenis} di sewa oleh {nama} dengan total waktu {waktu} dengan total harga {jumlahHarga}")
     except Exception as err:
-        print(f"Fungsi fetchToTransaction error : {err}")
+        print(f"Gagal menambahkan transaction : {err}")
 
 
 def transaction(jenis, idKendaraan):
@@ -86,7 +86,7 @@ def show_vehicles(table_name):
                 print(f"CC      : {row[3]}")
             print(f"Harga   : {row[-1]}")
     except Exception as err:
-        print(f"fungsi show_vehicles error : {err}")
+        print(f"gagal untuk show vehicle : {err}")
 
 
 def showTransaction():
@@ -103,7 +103,7 @@ def showTransaction():
             print(f"Harga           : {row[6]}")
 
     except Exception as err:
-        print(f"Fungsi showTransaction error : {err}")
+        print(f"Gagal untuk show transaction : {err}")
 
 
 def admin():
