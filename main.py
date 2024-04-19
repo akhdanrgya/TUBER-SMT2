@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
-import numpy as py
+import matplotlib.ticker as ticker
+import numpy as np
 import mysql.connector
 import os
 
@@ -106,30 +107,42 @@ def showTransaction():
 
     except Exception as err:
         print(f"Gagal untuk show transaction : {err}")
-        
+
+
 def statTransaction():
     try:
         fig, ax = plt.subplots()
-        totalBulan = {"March" : 0, "April" : 0}
-        myCursor.execute("SELECT harga, DATE_FORMAT(waktuAwal, '%M') FROM transaction")
+        formatter = ticker.ScalarFormatter()
+        formatter.set_scientific(False)
+
+        ax.yaxis.set_major_formatter(formatter)
+
+        totalBulan = {"January": 0, "February": 0, "March": 0, "April": 0, "May": 0, "June": 0,
+                      "July": 0, "August": 0, "September": 0, "October": 0, "November": 0, "December": 0}
+        myCursor.execute(
+            "SELECT harga, DATE_FORMAT(waktuAwal, '%M') FROM transaction")
         for row in myCursor:
             harga = row[0]
             bulan = row[1]
-            
+
             if bulan in totalBulan:
                 totalBulan[bulan] += harga
+
+        bar_label = ["red", "blue", "cyan", "pink", "green", "gray",
+                     "tomato", "brown", "black", "yellow", "indigo", "plum"]
+        bar_color = ['red', 'blue', 'cyan', 'pink', 'green', 'gray',
+                     'tomato', 'brown', 'black', 'yellow', 'indigo', 'plum']
         
-        bar_label = ["red", "blue"]
-        bar_color = ['tab:red', 'tab:blue']
-        
-        ax.bar(totalBulan.keys(), totalBulan.values(), label = bar_label, color = bar_color)
+
+        ax.bar(totalBulan.keys(), totalBulan.values(),
+               label=bar_label, color=bar_color)
         ax.set_ylabel("Keuntungan")
         ax.set_xlabel("Bulan")
         ax.set_title("Statistik keuntungan perbulan di tahun 2024")
-        ax.legend(title = "warna")
-        
+        ax.legend(title="warna")
+
         plt.show()
-        
+
     except Exception as err:
         print(f"gagal untuk fetch transaction : {err}")
 
@@ -213,7 +226,7 @@ def admin():
 
             elif pilih == 6:
                 main()
-            
+
             elif pilih == 5:
                 statTransaction()
 
@@ -294,5 +307,6 @@ def main():
                 break
     except Exception as err:
         print(f"fungsi main error : {err}")
+
 
 main()
