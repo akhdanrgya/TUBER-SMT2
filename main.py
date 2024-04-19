@@ -109,7 +109,7 @@ def showTransaction():
         
 def statTransaction():
     try:
-        ax = plt.subplots()
+        fig, ax = plt.subplots()
         totalBulan = {"March" : 0, "April" : 0}
         myCursor.execute("SELECT harga, DATE_FORMAT(waktuAwal, '%M') FROM transaction")
         for row in myCursor:
