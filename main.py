@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+import matplotlib.pyplot as plt
+import numpy as py
 import mysql.connector
 import os
 
@@ -104,6 +106,32 @@ def showTransaction():
 
     except Exception as err:
         print(f"Gagal untuk show transaction : {err}")
+        
+def statTransaction():
+    try:
+        ax = plt.subplots()
+        totalBulan = {"March" : 0, "April" : 0}
+        myCursor.execute("SELECT harga, DATE_FORMAT(waktuAwal, '%M') FROM transaction")
+        for row in myCursor:
+            harga = row[0]
+            bulan = row[1]
+            
+            if bulan in totalBulan:
+                totalBulan[bulan] += harga
+        
+        bar_label = ["red", "blue"]
+        bar_color = ['tab:red', 'tab:blue']
+        
+        ax.bar(totalBulan.keys(), totalBulan.values(), label = bar_label, color = bar_color)
+        ax.set_ylabel("Keuntungan")
+        ax.set_xlabel("Bulan")
+        ax.set_title("Statistik keuntungan perbulan di tahun 2024")
+        ax.legend(title = "warna")
+        
+        plt.show()
+        
+    except Exception as err:
+        print(f"gagal untuk fetch transaction : {err}")
 
 
 def admin():
@@ -117,8 +145,9 @@ def admin():
                 2. Hapus
                 3. Edit
                 4. Data Transaksi
-                5. Back
-                6. Exit
+                5. Stat
+                6. Back
+                7. Exit
                 
                 """)
             pilih = int(input("Masukan Pilihan: "))
@@ -182,8 +211,11 @@ def admin():
             elif pilih == 4:
                 showTransaction()
 
-            elif pilih == 5:
+            elif pilih == 6:
                 main()
+            
+            elif pilih == 5:
+                statTransaction()
 
     except Exception as err:
         print(f"fungsi admin error : {err}")
@@ -263,5 +295,4 @@ def main():
     except Exception as err:
         print(f"fungsi main error : {err}")
 
-if __name__ == "__main__":
-    main()
+main()
