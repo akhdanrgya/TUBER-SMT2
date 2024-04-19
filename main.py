@@ -136,9 +136,9 @@ def statTransaction():
 
         ax.bar(totalBulan.keys(), totalBulan.values(),
                label=bar_label, color=bar_color)
-        ax.set_ylabel("Keuntungan")
+        ax.set_ylabel("Pemasukan")
         ax.set_xlabel("Bulan")
-        ax.set_title("Statistik keuntungan perbulan di tahun 2024")
+        ax.set_title("Statistik Pemasukan perbulan di tahun 2024")
         ax.legend(title="warna")
 
         plt.show()
