@@ -127,15 +127,13 @@ def statTransaction():
 
             if bulan in totalBulan:
                 totalBulan[bulan] += harga
-
-        bar_label = ["red", "blue", "cyan", "pink", "green", "gray",
-                     "tomato", "brown", "black", "yellow", "indigo", "plum"]
+                 
         bar_color = ['red', 'blue', 'cyan', 'pink', 'green', 'gray',
                      'tomato', 'brown', 'black', 'yellow', 'indigo', 'plum']
         
 
         ax.bar(totalBulan.keys(), totalBulan.values(),
-               label=bar_label, color=bar_color)
+               label=totalBulan.keys(), color=bar_color)
         ax.set_ylabel("Pemasukan")
         ax.set_xlabel("Bulan")
         ax.set_title("Statistik Pemasukan perbulan di tahun 2024")
