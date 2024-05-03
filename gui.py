@@ -30,10 +30,19 @@ class AdminPanelWindow:
     def __init__(self, root):
         self.root = root
         self.root_admin_panel = tk.Tk()
-        self.root_admin_panel.title("ADMIN PANEL RENTAL KENDARAAN")
+        self.root_admin_panel.title("Admin panel")
         
         self.admin_label = Label(self.root_admin_panel, text="ADMIN PANEL RENTAL KENDARAAN", font="Arial")
         self.admin_label.pack(padx=50, pady=20)
+
+class SewaKendaraanWindow:
+    def __init__(self, root):
+        self.root = root
+        self.root_sewaKendaraan_panel = tk.Tk()
+        self.root_sewaKendaraan_panel.title("Sewa kendaraan")
+        
+        self.sewaKendaraan_label = Label(self.root_sewaKendaraan_panel, text="SEWA KENDARAAN", font="Arial")
+        self.sewaKendaraan_label.pack(padx=50, pady=20)
 
 class GUI:
     def __init__(self):
@@ -44,11 +53,17 @@ class GUI:
         self.label.pack(padx=50, pady=20)
         
         self.admin_btn = Button(self.root, text="Admin", command=self.open_admin_panel)
-        self.admin_btn.pack(padx=10, pady=10, side="left")
+        self.admin_btn.pack(padx=10, pady=10)
+
+        self.sewa_kendaraan = Button(self.root, text="Sewa Kendaraan", command=self.open_sewaKendaraan_panel)
+        self.sewa_kendaraan.pack(padx=10, pady=10)
         
         self.root.mainloop()
 
     def open_admin_panel(self):
         AdminPanel(self.root)
+    
+    def open_sewaKendaraan_panel(self):
+        SewaKendaraanWindow(self.root)
 
 GUI()
