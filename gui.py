@@ -34,7 +34,7 @@ class SideBar:
             widget.destroy()
 
         # Meminta PIN dari user
-        pin = simpledialog.askstring("PIN", "Masukkan PIN untuk Admin:")
+        pin = simpledialog.askstring("PIN", "Masukkan PIN untuk Admin:", show="*")
         
         # Cek PIN
         if pin == "123":
