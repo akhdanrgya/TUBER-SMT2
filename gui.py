@@ -7,63 +7,43 @@ class SideBar:
         self.frame = tk.Frame(self.root, bg="gray", width=150)
         self.frame.pack(side="left", fill="y")
         
-        self.tittle = Label(self.frame, text="RENTALKU", font="Arial")
-        self.tittle.pack(fill="x", padx=5, pady=5)
+        self.tittle = Label(self.frame, text="RENTALKU", font="Arial", bg="gray", fg="white")
+        self.tittle.pack(fill="x", padx=10, pady=10)
         
-        self.admin_btn = Button(self.frame, text="Admin", command=self.open_admin_panel)
+        self.admin_btn = Button(self.frame, text="Admin", command=self.show_admin_panel)
         self.admin_btn.pack(fill="x", padx=5, pady=5)
         
-        self.sewa_kendaraan_btn = Button(self.frame, text="Sewa Kendaraan", command=self.open_sewa_kendaraan_panel)
+        self.sewa_kendaraan_btn = Button(self.frame, text="Sewa Kendaraan", command=self.show_sewa_kendaraan_panel)
         self.sewa_kendaraan_btn.pack(fill="x", padx=5, pady=5)
 
-    def open_admin_panel(self):
-        AdminPanel(self.root)
-    
-    def open_sewa_kendaraan_panel(self):
-        SewaKendaraanWindow(self.root)
+        self.content_frame = tk.Frame(self.root)
+        self.content_frame.pack(side="left", fill="both", expand=True)
 
-class AdminPanel:
-    def __init__(self, root):
-        self.root = root
-        self.root_admin = tk.Toplevel(self.root)
-        self.root_admin.title("Admin panel")
+        # Default content
+        self.default_content()
 
-        self.label_admin = Label(self.root_admin, text="Enter PIN:", font="Arial")
-        self.label_admin.pack(padx=50, pady=10)
+    def default_content(self):
+        # Konten default di samping sidebar
+        self.default_label = Label(self.content_frame, text="Selamat datang di aplikasi RENTALKU", font="Arial")
+        self.default_label.pack(fill="both", expand=True)
 
-        self.pin_admin = Entry(self.root_admin, show="*")
-        self.pin_admin.pack(padx=50, pady=5)
+    def show_admin_panel(self):
+        # Hapus konten yang ada di frame
+        for widget in self.content_frame.winfo_children():
+            widget.destroy()
 
-        self.btn_admin = Button(self.root_admin, text="Enter", command=self.check_pin)
-        self.btn_admin.pack(padx=50, pady=10)
+        # Tampilkan konten Admin
+        self.admin_label = Label(self.content_frame, text="ADMIN PANEL RENTAL KENDARAAN", font="Arial")
+        self.admin_label.pack(fill="both", expand=True)
 
-    def check_pin(self):
-        pin = self.pin_admin.get()
+    def show_sewa_kendaraan_panel(self):
+        # Hapus konten yang ada di frame
+        for widget in self.content_frame.winfo_children():
+            widget.destroy()
 
-        if pin == "123":
-            self.root_admin.destroy()
-            AdminPanelWindow(self.root)
-        else:
-            self.label_admin.config(text="Incorrect PIN. Try again.", font="Arial", fg="red")
-            self.pin_admin.delete(0, 'end')
-
-class AdminPanelWindow:
-    def __init__(self, root):
-        self.root = root
-        self.root_admin_panel = tk.Toplevel(self.root)
-        self.root_admin_panel.title("Admin panel")
-        
-        self.admin_label = Label(self.root_admin_panel, text="ADMIN PANEL RENTAL KENDARAAN", font="Arial")
-        self.admin_label.pack(padx=50, pady=20)
-
-class SewaKendaraanWindow:
-    def __init__(self, root):
-        self.root = root
-        self.root_sewa_kendaraan_panel = tk.Toplevel(self.root)
-        self.root_sewa_kendaraan_panel.title("Sewa kendaraan")
-        
-        self.sewa_kendaraan_label = Label(self.root_sewa_kendaraan_panel, text="SEWA KENDARAAN", font="Arial")
-        self.sewa_kendaraan_label.pack(padx=50, pady=20)
+        # Tampilkan konten Sewa Kendaraan
+        self.sewa_kendaraan_label = Label(self.content_frame, text="SEWA KENDARAAN", font="Arial")
+        self.sewa_kendaraan_label.pack(fill="both", expand=True)
 
 class GUI:
     def __init__(self):
