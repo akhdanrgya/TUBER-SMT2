@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import *
+from tkinter import simpledialog
 
 class SideBar:
     def __init__(self, root):
@@ -7,14 +8,14 @@ class SideBar:
         self.frame = tk.Frame(self.root, bg="gray", width=150)
         self.frame.pack(side="left", fill="y")
         
-        self.tittle = Label(self.frame, text="RENTALKU", font="Arial", bg="gray", fg="white")
-        self.tittle.pack(fill="x", padx=10, pady=10)
+        self.title = Label(self.frame, text="RENTALKU", font="Arial", bg="gray", fg="white")
+        self.title.pack(fill="x", padx=10, pady=50)
         
         self.admin_btn = Button(self.frame, text="Admin", command=self.show_admin_panel)
-        self.admin_btn.pack(fill="x", padx=5, pady=5)
+        self.admin_btn.pack(fill="x", padx=50, pady=15)
         
         self.sewa_kendaraan_btn = Button(self.frame, text="Sewa Kendaraan", command=self.show_sewa_kendaraan_panel)
-        self.sewa_kendaraan_btn.pack(fill="x", padx=5, pady=5)
+        self.sewa_kendaraan_btn.pack(fill="x", padx=50, pady=15)
 
         self.content_frame = tk.Frame(self.root)
         self.content_frame.pack(side="left", fill="both", expand=True)
@@ -24,7 +25,7 @@ class SideBar:
 
     def default_content(self):
         # Konten default di samping sidebar
-        self.default_label = Label(self.content_frame, text="Selamat datang di aplikasi RENTALKU", font="Arial")
+        self.default_label = Label(self.content_frame, text="Selamat datang di aplikasi ", font="Arial")
         self.default_label.pack(fill="both", expand=True)
 
     def show_admin_panel(self):
@@ -32,9 +33,18 @@ class SideBar:
         for widget in self.content_frame.winfo_children():
             widget.destroy()
 
-        # Tampilkan konten Admin
-        self.admin_label = Label(self.content_frame, text="ADMIN PANEL RENTAL KENDARAAN", font="Arial")
-        self.admin_label.pack(fill="both", expand=True)
+        # Meminta PIN dari user
+        pin = simpledialog.askstring("PIN", "Masukkan PIN untuk Admin:")
+        
+        # Cek PIN
+        if pin == "123":
+            # Tampilkan konten Admin
+            self.admin_label = Label(self.content_frame, text="ADMIN PANEL RENTAL KENDARAAN", font="Arial")
+            self.admin_label.pack(fill="both", expand=True)
+        else:
+            # Jika PIN salah, tampilkan pesan kesalahan
+            error_label = Label(self.content_frame, text="PIN salah. Akses ditolak.", font="Arial", fg="red")
+            error_label.pack(fill="both", expand=True)
 
     def show_sewa_kendaraan_panel(self):
         # Hapus konten yang ada di frame
